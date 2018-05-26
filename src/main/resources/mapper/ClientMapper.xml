@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.spring2go.auth0.dao.ClientMapper">
+  <resultMap id="BaseResultMap" type="io.spring2go.auth0.model.Client">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="client_id" jdbcType="VARCHAR" property="clientId" />
+    <result column="contact_email" jdbcType="VARCHAR" property="contactEmail" />
+    <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="expire_duration" jdbcType="BIGINT" property="expireDuration" />
+    <result column="client_name" jdbcType="VARCHAR" property="clientName" />
+    <result column="allowed_implicit_grant" jdbcType="BIT" property="allowedImplicitGrant" />
+    <result column="allowed_client_credentials" jdbcType="BIT" property="allowedClientCredentials" />
+    <result column="secret" jdbcType="VARCHAR" property="secret" />
+    <result column="skip_consent" jdbcType="BIT" property="skipConsent" />
+    <result column="include_principal" jdbcType="BIT" property="includePrincipal" />
+    <result column="thumb_nail_url" jdbcType="VARCHAR" property="thumbNailUrl" />
+    <result column="use_refresh_tokens" jdbcType="BIT" property="useRefreshTokens" />
+    <result column="redirect_uris" jdbcType="VARCHAR" property="redirectUris" />
+    <result column="scopes" jdbcType="VARCHAR" property="scopes" />
+    <result column="attributes" jdbcType="VARCHAR" property="attributes" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+</mapper>

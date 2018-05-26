@@ -1,0 +1,36 @@
+<div id="resourceServerGrid">
+
+ <h1>Access Tokens</h1>
+ {{#if accessTokens}}
+   <table class="table table-bordered">
+       <thead>
+       <tr>
+           <th>Token</th>
+           <th>Resource server</th>
+           <th>Client</th>
+           <th>Scopes</th>
+           <th>Resource owner ID</th>
+           <th>Issue date</th>
+           <th>Valid until</th>
+           <th>Actions</th>
+       </tr>
+       </thead>
+       <tbody>
+       {{#each accessTokens}}
+       <tr data-accessTokenId="{{id}}">
+         <td>{{token}}</td>
+         <td>todo</td>
+         <td>{{clientId}}</td>
+         <td>{{scopes}}</td>
+         <td>{{resourceOwnerId}}</td>
+         <td>{{creationDate}}</td>
+         <td>{{expiresIn}}</td>
+         <td><a class="deleteAccessTokenButton btn btn-small" href="#">Delete</a></td>
+       </tr>
+       {{/each}}
+       </tbody>
+   </table>
+ {{else}}
+   <p>No access tokens found for current user.</p>
+ {{/if}}
+ </div>

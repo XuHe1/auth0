@@ -1,0 +1,34 @@
+<div id="statisticsGrid">
+  <h1>Statistics</h1>
+  {{#if resourceServers}}
+    <div class="page-header">
+      <p>All your Resource Servers and client statistics</p>
+    </div>   
+    {{#each resourceServers}}
+      <p>Resource Server name: {{name}}</p>
+      {{#if description}}
+      <p>Description: {{description}}</p>
+      {{/if}}      
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th style="width: 40%;">Client App name</th>
+          <th style="width: 40%;">Description</th>
+          <th style="width: 20%;">#Unique clients</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each clients}}
+          <tr>
+            <td>{{name}}</td>
+            <td>{{description}}</td>
+            <td>{{tokenCount}}</td>
+          </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    {{/each}} 
+  {{else}}
+    <p>No resource servers configured.</p>
+  {{/if}}
+</div>
