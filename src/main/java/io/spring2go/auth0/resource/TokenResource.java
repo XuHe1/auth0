@@ -20,11 +20,11 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import io.spring2go.auth0.biz.AbstractAuthenticator;
 import io.spring2go.auth0.biz.AbstractUserConsentHandler;
@@ -251,7 +251,7 @@ public class TokenResource {
 	private String appendStateParameter(AuthorizationRequest authReq) {
 		String state = authReq.getState();
 		try {
-			return StringUtils.isEmpty(state) ? "" : "&state=".concat(URLEncoder.encode(state, "UTF-8"));
+			return StringUtils.isBlank(state) ? "" : "&state=".concat(URLEncoder.encode(state, "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
@@ -298,7 +298,7 @@ public class TokenResource {
 	 */
 
 	private UserPassCredentials getUserPassCredentials(String authorization, AccessTokenRequest accessTokenRequest) {
-		return StringUtils.isEmpty(authorization)
+		return StringUtils.isBlank(authorization)
 				? new UserPassCredentials(accessTokenRequest.getUniqueClientId(), accessTokenRequest.getClientSecret())
 				: new UserPassCredentials(authorization);
 	}

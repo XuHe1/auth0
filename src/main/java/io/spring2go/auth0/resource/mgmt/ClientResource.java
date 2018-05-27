@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import io.spring2go.auth0.model.Client;
 import io.spring2go.auth0.service.ClientService;
@@ -80,6 +81,12 @@ public class ClientResource extends AbstractResource {
 
 		client.setClientId(generateUniqueClientId(client));
 		client.setSecret(client.isAllowedImplicitGrant() ? null : generateSecret());
+		
+		// validation
+		List<String> violations = client.validate();
+		if (!CollectionUtils.isEmpty(violations)) {
+			return super.buildViolationErrorResponse(violations);
+		}
 
 		try {
 			clientService.save(client);
@@ -144,6 +151,12 @@ public class ClientResource extends AbstractResource {
 		// Copy over read-only fields
 		newOne.setClientId(clientFromStore.getClientId());
 		newOne.setSecret(newOne.isAllowedImplicitGrant() ? null : clientFromStore.getSecret());
+		
+		// validation
+		List<String> violations = newOne.validate();
+		if (!CollectionUtils.isEmpty(violations)) {
+			return super.buildViolationErrorResponse(violations);
+		}
 
 		try {
 			clientService.save(newOne);

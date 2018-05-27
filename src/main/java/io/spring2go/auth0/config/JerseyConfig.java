@@ -1,4 +1,4 @@
-package io.spring2go.auth0.configurer;
+package io.spring2go.auth0.config;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.stereotype.Component;

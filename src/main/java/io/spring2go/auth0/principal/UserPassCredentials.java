@@ -1,8 +1,7 @@
 package io.spring2go.auth0.principal;
 
 import org.apache.commons.codec.binary.Base64;
-
-import com.alibaba.druid.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Holder and parser for the username and password from the authentication
@@ -51,7 +50,7 @@ public class UserPassCredentials {
 	}
 
 	public boolean isValid() {
-		return !StringUtils.isEmpty(username) && !StringUtils.isEmpty(password);
+		return !StringUtils.isBlank(username) && !StringUtils.isBlank(password);
 	}
 
 	/**
@@ -79,7 +78,7 @@ public class UserPassCredentials {
 
 	public String getAuthorizationHeaderValue() {
 		String result = null;
-		if (!StringUtils.isEmpty(username) && !StringUtils.isEmpty(password)) {
+		if (!StringUtils.isBlank(username) && !StringUtils.isBlank(password)) {
 			String value = username + ":" + password;
 			result = "Basic " + new String(Base64.encodeBase64(value.getBytes()));
 		}

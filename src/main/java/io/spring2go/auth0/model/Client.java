@@ -1,6 +1,11 @@
 package io.spring2go.auth0.model;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.*;
 
 import io.spring2go.auth0.principal.UserPassCredentials;
@@ -256,7 +261,7 @@ public class Client {
 	 * @return allowed_implicit_grant - 是否允许简化模式
 	 */
 	public Boolean isAllowedImplicitGrant() {
-		return allowedImplicitGrant;
+		return allowedImplicitGrant == null? Boolean.FALSE : allowedImplicitGrant;
 	}
 
 	/**
@@ -275,7 +280,7 @@ public class Client {
 	 * @return allowed_client_credentials - 是否允许客户名密码模式
 	 */
 	public Boolean isAllowedClientCredentials() {
-		return allowedClientCredentials;
+		return allowedClientCredentials == null ? Boolean.FALSE : allowedClientCredentials;
 	}
 
 	/**
@@ -313,7 +318,7 @@ public class Client {
 	 * @return skip_consent - 是否忽略同意
 	 */
 	public Boolean isSkipConsent() {
-		return skipConsent;
+		return skipConsent == null? Boolean.FALSE : skipConsent;
 	}
 
 	/**
@@ -332,7 +337,7 @@ public class Client {
 	 * @return include_principal - 是否包含主体信息
 	 */
 	public Boolean isIncludePrincipal() {
-		return includePrincipal;
+		return includePrincipal ==  null ? Boolean.FALSE : includePrincipal;
 	}
 
 	/**
@@ -370,7 +375,7 @@ public class Client {
 	 * @return use_refresh_tokens - 是否支持刷新令牌
 	 */
 	public Boolean isUseRefreshTokens() {
-		return useRefreshTokens;
+		return useRefreshTokens == null ? Boolean.FALSE : useRefreshTokens;
 	}
 
 	/**
@@ -482,5 +487,32 @@ public class Client {
 		return credentials != null && credentials.isValid() && credentials.getUsername().equals(clientId)
 				&& credentials.getPassword().equals(secret);
 
+	}
+
+	/**
+	 * 验证并获取违反消息列表，没有违反则返回列表为空
+	 * 
+	 * @return a list of violation messages
+	 */
+	public List<String> validate() {
+		List<String> violationMessages = new ArrayList<String>();
+
+		if (isUseRefreshTokens() && getExpireDuration() == 0L) {
+			violationMessages.add("If refresh tokens are to be used then the expiry duration must be greater then 0");
+		}
+
+		if (isAllowedClientCredentials() && isAllowedImplicitGrant()) {
+			violationMessages.add(
+					"A Client can not be issued the client credentials grant AND the implicit grant as client credentials requires a secret.");
+		}
+
+		for (String redirectUri : redirectUris.split("\\s*,\\s*")) {
+			try {
+				new URL(redirectUri);
+			} catch (MalformedURLException e) {
+				violationMessages.add("redirectUri '" + redirectUri + "' is not a valid URI");
+			}
+		}
+		return violationMessages;
 	}
 }

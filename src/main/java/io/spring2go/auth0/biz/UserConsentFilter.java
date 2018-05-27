@@ -11,7 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import io.spring2go.auth0.consent.FormUserConsentHandler;
 import io.spring2go.auth0.model.AuthorizationRequest;
@@ -44,7 +44,7 @@ public class UserConsentFilter extends AuthorizationSupport implements Filter {
 
 	private AuthorizationRequest findAuthorizationRequest(HttpServletRequest request) {
 		String authState = (String) request.getAttribute(AbstractAuthenticator.AUTH_STATE);
-		if (StringUtils.isEmpty(authState)) {
+		if (StringUtils.isBlank(authState)) {
 			authState = request.getParameter(AbstractAuthenticator.AUTH_STATE);
 		}
 		return authorizationRequestService.findByAuthState(authState);

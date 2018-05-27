@@ -5,10 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 /**
  * Implementation of {@link OAuth2Validator}
@@ -77,7 +77,7 @@ public class OAuth2ValidatorImpl implements OAuth2Validator {
 	}
 
 	protected List<String> determineScopes(AuthorizationRequest authorizationRequest, Client client) {
-		if (StringUtils.isEmpty(authorizationRequest.getRequestedScopes())) {
+		if (StringUtils.isBlank(authorizationRequest.getRequestedScopes())) {
 			// TODO add default scopes.
 			return null;
 		} else {
@@ -96,7 +96,7 @@ public class OAuth2ValidatorImpl implements OAuth2Validator {
 			Client client) {
 		List<String> uris = Arrays.asList(client.getRedirectUris().split("\\s*,\\s*"));
 		String redirectUri = authorizationRequest.getRedirectUri();
-		if (StringUtils.isEmpty(redirectUri)) {
+		if (StringUtils.isBlank(redirectUri)) {
 			if (responseType.equals(IMPLICIT_GRANT_RESPONSE_TYPE)) {
 				throw new ValidationResponseException(IMPLICIT_GRANT_REDIRECT_URI);
 			} else if (CollectionUtils.isEmpty(uris)) {
@@ -142,7 +142,7 @@ public class OAuth2ValidatorImpl implements OAuth2Validator {
 
 	protected String validateResponseType(AuthorizationRequest authorizationRequest) {
 		String responseType = authorizationRequest.getResponseType();
-		if (StringUtils.isEmpty(responseType) || !RESPONSE_TYPES.contains(responseType)) {
+		if (StringUtils.isBlank(responseType) || !RESPONSE_TYPES.contains(responseType)) {
 			throw new ValidationResponseException(UNSUPPORTED_RESPONSE_TYPE);
 		}
 		return responseType;
@@ -153,7 +153,7 @@ public class OAuth2ValidatorImpl implements OAuth2Validator {
 
 	protected void validateGrantType(AccessTokenRequest request) {
 		String grantType = request.getGrantType();
-		if (StringUtils.isEmpty(grantType) || !GRANT_TYPES.contains(grantType)) {
+		if (StringUtils.isBlank(grantType) || !GRANT_TYPES.contains(grantType)) {
 			throw new ValidationResponseException(UNSUPPORTED_GRANT_TYPE);
 		}
 	}
@@ -161,11 +161,11 @@ public class OAuth2ValidatorImpl implements OAuth2Validator {
 	protected void validateAttributes(AccessTokenRequest request) {
 		String grantType = request.getGrantType();
 		if (GRANT_TYPE_AUTHORIZATION_CODE.equals(grantType)) {
-			if (StringUtils.isEmpty(request.getCode())) {
+			if (StringUtils.isBlank(request.getCode())) {
 				throw new ValidationResponseException(INVALID_GRANT_AUTHORIZATION_CODE);
 			}
 		} else if (GRANT_TYPE_REFRESH_TOKEN.equals(grantType)) {
-			if (StringUtils.isEmpty(request.getRefreshToken())) {
+			if (StringUtils.isBlank(request.getRefreshToken())) {
 				throw new ValidationResponseException(INVALID_GRANT_REFRESH_TOKEN);
 			}
 		}
@@ -174,7 +174,7 @@ public class OAuth2ValidatorImpl implements OAuth2Validator {
 	protected void validateAccessTokenRequest(AccessTokenRequest accessTokenRequest) {
 		if (accessTokenRequest.getGrantType().equals(GRANT_TYPE_CLIENT_CREDENTIALS)) {
 			String clientId = accessTokenRequest.getUniqueClientId();
-			Client client = StringUtils.isEmpty(clientId) ? null : clientService.findByUniqueClientId(clientId);
+			Client client = StringUtils.isBlank(clientId) ? null : clientService.findByUniqueClientId(clientId);
 			if (client == null) {
 				throw new ValidationResponseException(UNKNOWN_CLIENT_ID);
 			}

@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import io.spring2go.auth0.biz.OAuth2Validator;
 import io.spring2go.auth0.model.ErrorResponse;
+import io.spring2go.auth0.model.ValidationErrorResponse;
 import io.spring2go.auth0.model.VerifyTokenResponse;
 import io.spring2go.auth0.principal.AuthenticatedPrincipal;
 
@@ -66,6 +67,11 @@ public class AbstractResource {
 			}
 		}
 		return null;
+	}
+	
+	protected Response buildViolationErrorResponse(List<String> violations) {
+		ValidationErrorResponse responseBody = new ValidationErrorResponse(violations);
+		return Response.status(Response.Status.BAD_REQUEST).entity(responseBody).build();
 	}
 
 	public String generateRandom() {

@@ -1,4 +1,4 @@
-package com.conpany.project;
+package io.spring2go.auth0;
 
 
 import org.junit.runner.RunWith;

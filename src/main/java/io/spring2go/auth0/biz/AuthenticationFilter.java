@@ -15,9 +15,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 import io.spring2go.auth0.authentication.FormLoginAuthenticator;
 import io.spring2go.auth0.biz.OAuth2Validator.ValidationResponse;
@@ -83,7 +83,7 @@ public class AuthenticationFilter extends AuthorizationSupport implements Filter
 		authorizationRequest.setUniqueClientId(clientId);
 		authorizationRequest.setRedirectUri(redirectUri);
 
-		if (!StringUtils.isEmpty(request.getParameter("scope"))) {
+		if (StringUtils.isNotBlank(request.getParameter("scope"))) {
 			authorizationRequest.setRequestedScopes(request.getParameter("scope"));
 		}
 
@@ -121,7 +121,7 @@ public class AuthenticationFilter extends AuthorizationSupport implements Filter
 			redirectUri = redirectUri.concat(redirectUri.contains("?") ? "&" : "?");
 			redirectUri = redirectUri.concat("error=").concat(validate.getValue()).concat("&error_description=")
 					.concat(validate.getDescription())
-					.concat(StringUtils.isEmpty(state) ? "" : "&state=".concat(URLEncoder.encode(state, "UTF-8")));
+					.concat(StringUtils.isBlank(state) ? "" : "&state=".concat(URLEncoder.encode(state, "UTF-8")));
 			LOG.info("Sending error response, a redirect to: {}", redirectUri);
 			response.sendRedirect(redirectUri);
 		} else {

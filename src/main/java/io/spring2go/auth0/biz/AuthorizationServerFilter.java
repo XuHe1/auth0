@@ -13,12 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.HttpHeaders;
 
+import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.client.ClientResponse;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -243,21 +243,21 @@ public class AuthorizationServerFilter implements Filter {
 	 */
 	protected boolean handledCorsPreflightRequest(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
-		if (!this.allowCorsRequests || StringUtils.isEmpty(request.getHeader("Origin"))) {
+		if (!this.allowCorsRequests || StringUtils.isBlank(request.getHeader("Origin"))) {
 			return false;
 		}
 		/*
 		 * We must do this anyway, this being (probably) a CORS request
 		 */
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		if (!StringUtils.isEmpty(request.getHeader("Access-Control-Request-Method"))
+		if (StringUtils.isNotBlank(request.getHeader("Access-Control-Request-Method"))
 				&& request.getMethod().equalsIgnoreCase("OPTIONS")) {
 			/*
 			 * We don't want to propogate the request any further
 			 */
 			response.setHeader("Access-Control-Allow-Methods", getAccessControlAllowedMethods());
 			String requestHeaders = request.getHeader("Access-Control-Request-Headers");
-			if (StringUtils.isEmpty(requestHeaders)) {
+			if (StringUtils.isNotBlank(requestHeaders)) {
 				response.setHeader("Access-Control-Allow-Headers", getAllowedHeaders(requestHeaders));
 			}
 			response.setHeader("Access-Control-Max-Age", getAccessControlMaxAge());

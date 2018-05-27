@@ -1,11 +1,10 @@
 package io.spring2go.auth0.consent;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-
-import com.alibaba.druid.util.StringUtils;
 
 import io.spring2go.auth0.biz.AbstractAuthenticator;
 import io.spring2go.auth0.biz.AbstractUserConsentHandler;
@@ -53,7 +52,7 @@ public class FormUserConsentHandler extends AbstractUserConsentHandler {
 
 	private boolean isUserConsentPost(HttpServletRequest request) {
 		String oauthApproval = request.getParameter(USER_OAUTH_APPROVAL);
-		return request.getMethod().equals(HttpMethod.POST.toString()) && !StringUtils.isEmpty(oauthApproval);
+		return request.getMethod().equals(HttpMethod.POST.toString()) && StringUtils.isNotBlank(oauthApproval);
 	}
 
 	private void processInitial(HttpServletRequest request, ServletResponse response, FilterChain chain,

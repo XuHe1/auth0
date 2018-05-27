@@ -10,12 +10,12 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import io.spring2go.auth0.biz.OAuth2Validator.ValidationResponse;
 import io.spring2go.auth0.biz.ValidationResponseException;
@@ -84,7 +84,7 @@ public class RevokeResource {
 
 	protected Client validateClient(UserPassCredentials credentials) {
 		String clientId = credentials.getUsername();
-		Client client = StringUtils.isEmpty(clientId) ? null : clientService.findByUniqueClientId(clientId);
+		Client client = StringUtils.isBlank(clientId) ? null : clientService.findByUniqueClientId(clientId);
 		if (client == null) {
 			throw new ValidationResponseException(UNKNOWN_CLIENT_ID);
 		}
@@ -92,7 +92,7 @@ public class RevokeResource {
 	}
 
 	private UserPassCredentials getClientCredentials(String authorization, AccessTokenRequest accessTokenRequest) {
-		return StringUtils.isEmpty(authorization)
+		return StringUtils.isBlank(authorization)
 				? new UserPassCredentials(accessTokenRequest.getUniqueClientId(), accessTokenRequest.getClientSecret())
 				: new UserPassCredentials(authorization);
 	}
